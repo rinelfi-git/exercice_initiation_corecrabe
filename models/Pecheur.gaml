@@ -14,6 +14,7 @@ species Pecheur parent: Personne {
 	bool a_la_peche;
 	int nombre_crabe_capture;
 	int nombre_de_capture_maximal;
+	int jours_de_stockage;
 	list<Mareyeur> mareyeur_habitues;
 	list<Mareyeur> mareyeur_inconnus;
 
@@ -34,20 +35,20 @@ species Pecheur parent: Personne {
 		list<Crabe> crabes <- (agents of_generic_species Crabe) at_distance (5);
 		if (length(crabes) < nombre_de_capture_maximal) {
 			ask crabes {
-				write 'capture de crabe ' + self.sexe;
 				myself.nombre_crabe_capture <- myself.nombre_crabe_capture + 1;
 				do die;
 			}
+
 		} else {
 			nombre_crabe_capture <- nombre_de_capture_maximal;
 			loop i from: 0 to: nombre_de_capture_maximal - 1 {
-				ask crabes[i]{
-					do die;	
+				ask crabes[i] {
+					do die;
 				}
-			}
-		}
 
-		write 'nombre de crabe capturé: ' + nombre_crabe_capture;
+			}
+
+		}
 	}
 
 	action vendre {
@@ -55,11 +56,8 @@ species Pecheur parent: Personne {
 		mareyeur.nombre_crabe_obtenu <- nombre_crabe_capture;
 		nombre_crabe_capture <- 0;
 		if (mareyeur_habitues index_of mareyeur < 0) {
-			write 'Nouveau ' + mareyeur + ' pour le ' + self;
 			add mareyeur to: mareyeur_habitues;
 		}
-
-		write 'mareyeurs conus de ' + self + ' sont : ' + mareyeur_habitues;
 	}
 
 	reflex travailler {
@@ -71,8 +69,18 @@ species Pecheur parent: Personne {
 
 	}
 
-	reflex vendre when: !a_la_peche and nombre_crabe_capture >= 10 {
-		do vendre;
+	reflex vendre when: !a_la_peche {
+		if (nombre_crabe_capture >= 10) {
+			do vendre;
+		} else {
+			jours_de_stockage <- jours_de_stockage + 1;
+		}
+
+	}
+	
+	reflex consommer when: jours_de_stockage >=2 {
+		jours_de_stockage <- 0;
+		nombre_crabe_capture <- 0;
 	}
 
 	aspect {

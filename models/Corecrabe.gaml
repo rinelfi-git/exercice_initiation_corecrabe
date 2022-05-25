@@ -16,7 +16,6 @@ import './Exportateur.gaml'
 global {
 	int nombre_de_crabe_male_evolution;
 	int nombre_de_crabe_femelle_evolution;
-	
 	int nombre_de_crabe_male;
 	int nombre_de_crabe_femelle;
 	int nombre_de_pecheur;
@@ -35,14 +34,21 @@ global {
 		nombre_de_crabe_male_evolution <- 0;
 		nombre_de_crabe_femelle_evolution <- 0;
 		ask Crabe {
-			nombre_de_crabe_male_evolution <- nombre_de_crabe_male_evolution +1;
+			nombre_de_crabe_male_evolution <- nombre_de_crabe_male_evolution + 1;
 		}
+
 		ask Femelle {
-			nombre_de_crabe_femelle_evolution <- nombre_de_crabe_femelle_evolution +1;
+			nombre_de_crabe_femelle_evolution <- nombre_de_crabe_femelle_evolution + 1;
 		}
 
 	}
-	}
+
+	reflex arreter_simulation {
+		if (length(agents of_generic_species Crabe) = 0) {
+			do pause;
+		}
+
+	} }
 /* Insert your model definition here */
 experiment 'Modélisation Coracrabe' type: gui {
 	parameter "Mâle" var: nombre_de_crabe_male <- 30 min: 30 max: 100 category: "Crabe";
@@ -51,7 +57,6 @@ experiment 'Modélisation Coracrabe' type: gui {
 	parameter "Mareyeur" var: nombre_de_mareyeur <- 10 min: 1 max: 50 category: "Population";
 	parameter "Collecteur" var: nombre_de_collecteur <- 5 min: 1 max: 50 category: "Population";
 	parameter "Exportateur" var: nombre_d_exportateur <- 5 min: 1 max: 50 category: "Population";
-	
 	output {
 		display 'Simulation Corecrabe' type: java2D {
 			grid Plan lines: #black;
