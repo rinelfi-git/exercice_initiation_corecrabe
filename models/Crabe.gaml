@@ -15,7 +15,7 @@ species Crabe {
 	agent environnement_crabe;
 
 	init {
-		environnement_crabe<- Plan[0, 0];
+		environnement_crabe <- Plan[0, 0];
 		sexe <- 'male';
 		couleur <- rgb(255, 255, 255);
 		location <- any_location_in(environnement_crabe);
@@ -51,8 +51,8 @@ species Femelle parent: Crabe {
 	}
 
 	action pondre {
-		create Crabe number: rnd(5);
-		create Femelle number: rnd(3);
+		create Crabe number: rnd(10);
+		create Femelle number: rnd(10);
 	}
 	
 	reflex fecondable when: flip(probailite_de_production) and age >= 8 {

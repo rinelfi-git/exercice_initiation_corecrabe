@@ -9,7 +9,7 @@ model Personne
 import './Plan.gaml'
 
 /* Insert your model definition here */
-species Personne skills: [moving] {
+species Personne {
 	geometry forme;
 	rgb couleur;
 	agent environnement_crabe;
@@ -30,73 +30,5 @@ species Personne skills: [moving] {
 
 }
 
-species Pecheur parent: Personne {
-	bool a_la_peche;
-	int nombre_crabe_capture;
-	list<unknown> mareyeur_habitues;
 
-	init {
-		a_la_peche <- false;
-		nombre_crabe_capture <- 0;
-		mareyeur_habitues <- [];
-		couleur <- #green;
-		location <- any_location_in(environnement_marche);
-	}
 
-	action pecher {
-		a_la_peche <- true;
-		write location;
-	}
-
-	action rentrer_a_la_terre_ferme {
-		a_la_peche <- false;
-		write location;
-	}
-
-	reflex travailler {
-		if (a_la_peche) {
-			do rentrer_a_la_terre_ferme;
-			location <- any_location_in(environnement_marche);
-		} else {
-			do pecher;
-			location <- any_location_in(environnement_crabe);
-		}
-
-	}
-
-}
-
-species Mareyeur parent: Personne {
-	int nombre_crabe_obtenu;
-
-	init {
-		couleur <- #red;
-		location <- any_location_in(environnement_marche);
-	}
-
-}
-
-species AgentCommercial parent: Personne {
-	int quota;
-
-	init {
-		couleur <- #yellow;
-		location <- any_location_in(environnement_marche);
-	}
-
-}
-
-species Collecteur parent: AgentCommercial{
-	init {
-		location <- any_location_in(environnement_marche);
-	}
-
-}
-
-species Exportateur parent: AgentCommercial{
-	init {
-		couleur <- #blue;
-		location <- any_location_in(environnement_exportation);
-	}
-
-}
