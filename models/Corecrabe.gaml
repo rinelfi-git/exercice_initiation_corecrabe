@@ -20,6 +20,9 @@ global {
 		create Crabe number: nombre_de_crabe_male with:(age: rnd(365 * 8));
 		create Femelle number: nombre_de_crabe_femelle with:(age: rnd(365 * 8));
 		create Pecheur number: nombre_de_pecheur;
+		create Mareyeur number: nombre_de_pecheur;
+		create Collecteur number: nombre_de_pecheur;
+		create Exportateur number: nombre_de_pecheur;
 	}
 }
 /* Insert your model definition here */
@@ -35,6 +38,9 @@ experiment personmodel type: gui {
 			species Crabe;
 			species Femelle;
 			species Pecheur;
+			species Mareyeur;
+			species Collecteur;
+			species Exportateur;
 		}
 	}
 }

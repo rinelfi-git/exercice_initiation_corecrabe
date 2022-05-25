@@ -22,7 +22,6 @@ species Personne skills: [moving] {
 		environnement_exportation <- Plan[2, 0];
 		couleur <- #white;
 		forme <- circle(1);
-		location <- any_location_in(environnement_marche);
 	}
 
 	aspect {
@@ -41,6 +40,7 @@ species Pecheur parent: Personne {
 		nombre_crabe_capture <- 0;
 		mareyeur_habitues <- [];
 		couleur <- #green;
+		location <- any_location_in(environnement_marche);
 	}
 
 	action pecher {
@@ -62,6 +62,41 @@ species Pecheur parent: Personne {
 			location <- any_location_in(environnement_crabe);
 		}
 
+	}
+
+}
+
+species Mareyeur parent: Personne {
+	int nombre_crabe_obtenu;
+
+	init {
+		couleur <- #red;
+		location <- any_location_in(environnement_marche);
+	}
+
+}
+
+species AgentCommercial parent: Personne {
+	int quota;
+
+	init {
+		couleur <- #yellow;
+		location <- any_location_in(environnement_marche);
+	}
+
+}
+
+species Collecteur parent: AgentCommercial{
+	init {
+		location <- any_location_in(environnement_marche);
+	}
+
+}
+
+species Exportateur parent: AgentCommercial{
+	init {
+		couleur <- #blue;
+		location <- any_location_in(environnement_exportation);
 	}
 
 }
