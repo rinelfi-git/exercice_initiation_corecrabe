@@ -13,11 +13,13 @@ import './Crabe.gaml'
 species Pecheur parent: Personne {
 	bool a_la_peche;
 	int nombre_crabe_capture;
+	int nombre_de_capture_maximal;
 	list<Mareyeur> mareyeur_habitues;
 	list<Mareyeur> mareyeur_inconnus;
 
 	init {
 		couleur <- #green;
+		nombre_de_capture_maximal <- 100;
 		location <- any_location_in(environnement_marche);
 	}
 
@@ -29,16 +31,20 @@ species Pecheur parent: Personne {
 	action pecher {
 		a_la_peche <- true;
 		location <- any_location_in(environnement_crabe);
-		list<Crabe> male <- Crabe at_distance (5);
-		list<Femelle> femelle <- Femelle at_distance (5);
-		ask male {
-			myself.nombre_crabe_capture <- myself.nombre_crabe_capture + 1;
-			do die;
-		}
-
-		ask femelle {
-			myself.nombre_crabe_capture <- myself.nombre_crabe_capture + 1;
-			do die;
+		list<Crabe> crabes <- (agents of_generic_species Crabe) at_distance (5);
+		if (length(crabes) < nombre_de_capture_maximal) {
+			ask crabes {
+				write 'capture de crabe ' + self.sexe;
+				myself.nombre_crabe_capture <- myself.nombre_crabe_capture + 1;
+				do die;
+			}
+		} else {
+			nombre_crabe_capture <- nombre_de_capture_maximal;
+			loop i from: 0 to: nombre_de_capture_maximal - 1 {
+				ask crabes[i]{
+					do die;	
+				}
+			}
 		}
 
 		write 'nombre de crabe capturé: ' + nombre_crabe_capture;
@@ -52,17 +58,21 @@ species Pecheur parent: Personne {
 			write 'Nouveau ' + mareyeur + ' pour le ' + self;
 			add mareyeur to: mareyeur_habitues;
 		}
+
 		write 'mareyeurs conus de ' + self + ' sont : ' + mareyeur_habitues;
 	}
 
 	reflex travailler {
-		if (a_la_peche) {
+		if (a_la_peche or nombre_crabe_capture > 10) {
 			do rentrer;
-			do vendre;
 		} else {
 			do pecher;
 		}
 
+	}
+
+	reflex vendre when: !a_la_peche and nombre_crabe_capture >= 10 {
+		do vendre;
 	}
 
 	aspect {

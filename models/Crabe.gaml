@@ -19,7 +19,6 @@ species Crabe {
 		sexe <- 'male';
 		couleur <- rgb(255, 255, 255);
 		location <- any_location_in(environnement_crabe);
-		
 	}
 	
 	reflex deplacer {
