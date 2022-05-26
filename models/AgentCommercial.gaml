@@ -12,6 +12,7 @@ import './Personne.gaml'
 
 species AgentCommercial parent: Personne {
 	int quota;
+	int nombre_de_crabe;
 
 	init {
 		couleur <- #yellow;

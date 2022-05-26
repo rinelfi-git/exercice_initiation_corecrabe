@@ -16,6 +16,7 @@ import './Exportateur.gaml'
 global {
 	int nombre_de_crabe_male_evolution;
 	int nombre_de_crabe_femelle_evolution;
+	int achat_de_crabe_pecheur_evolution;
 	int nombre_de_crabe_male;
 	int nombre_de_crabe_femelle;
 	int nombre_de_pecheur;
@@ -24,21 +25,23 @@ global {
 	int nombre_d_exportateur;
 
 	init {
-		create Crabe number: nombre_de_crabe_male with: (age: rnd(365 * 8));
-		create Femelle number: nombre_de_crabe_femelle with: (age: rnd(365 * 8));
+		create Crabe number: nombre_de_crabe_male with: (age: 365 * 8);
+		create Femelle number: nombre_de_crabe_femelle with: (age: 365 * 8);
 		create Pecheur number: nombre_de_pecheur;
 		create Mareyeur number: nombre_de_mareyeur;
+		create Collecteur number: 4;
+		create Exportateur number: 1;
 	}
 
 	reflex nombre_de_population {
-		nombre_de_crabe_male_evolution <- 0;
-		nombre_de_crabe_femelle_evolution <- 0;
-		ask Crabe {
-			nombre_de_crabe_male_evolution <- nombre_de_crabe_male_evolution + 1;
-		}
+		nombre_de_crabe_male_evolution <- length(Crabe);
+		nombre_de_crabe_femelle_evolution <- length(Femelle);
+	}
 
-		ask Femelle {
-			nombre_de_crabe_femelle_evolution <- nombre_de_crabe_femelle_evolution + 1;
+	reflex circulation_argent {
+		achat_de_crabe_pecheur_evolution <- 0;
+		ask Pecheur {
+			myself.achat_de_crabe_pecheur_evolution <- myself.achat_de_crabe_pecheur_evolution + self.argent_gagne;
 		}
 
 	}
@@ -51,28 +54,32 @@ global {
 	} }
 /* Insert your model definition here */
 experiment 'Modélisation Coracrabe' type: gui {
-	parameter "Mâle" var: nombre_de_crabe_male <- 30 min: 30 max: 100 category: "Crabe";
-	parameter "Femelle" var: nombre_de_crabe_femelle <- 30 min: 30 max: 100 category: "Crabe";
+	parameter "Mâle" var: nombre_de_crabe_male <- 1000 min: 1000 max: 2000 category: "Crabe";
+	parameter "Femelle" var: nombre_de_crabe_femelle <- 1000 min: 1000 max: 2000 category: "Crabe";
 	parameter "Pecheur" var: nombre_de_pecheur <- 10 min: 1 max: 50 category: "Population";
 	parameter "Mareyeur" var: nombre_de_mareyeur <- 10 min: 1 max: 50 category: "Population";
-	parameter "Collecteur" var: nombre_de_collecteur <- 5 min: 1 max: 50 category: "Population";
-	parameter "Exportateur" var: nombre_d_exportateur <- 5 min: 1 max: 50 category: "Population";
 	output {
-		display 'Simulation Corecrabe' type: java2D {
-			grid Plan lines: #black;
-			species Personne;
-			species Crabe;
-			species Femelle;
-			species Pecheur;
-			species Mareyeur;
-			species Collecteur;
-			species Exportateur;
+		display 'Simulation vente de crabe' type: java2D {
+			grid Plan border: #black;
+			species Crabe aspect: icone;
+			species Femelle aspect: icone;
+			species Pecheur aspect: icone;
+			species Mareyeur aspect: icone;
+			species Collecteur aspect: icone;
+			species Exportateur aspect: icone;
 		}
 
 		display 'Graphique Crabe' type: java2D {
-			chart 'chart' type: histogram {
+			chart 'Evolution de la population de crabe' type: series {
 				data 'Crabe Mâle' value: nombre_de_crabe_male_evolution color: #yellow;
 				data 'Crabe Femelle' value: nombre_de_crabe_femelle_evolution color: #red;
+			}
+
+		}
+
+		display 'Graphique Argent' {
+			chart 'Gain d\'argent par le pêcheur' type: series {
+				data 'Pecheur' value: achat_de_crabe_pecheur_evolution color: #green;
 			}
 
 		}

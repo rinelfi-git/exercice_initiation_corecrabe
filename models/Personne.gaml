@@ -9,7 +9,7 @@ model Personne
 import './Plan.gaml'
 
 /* Insert your model definition here */
-species Personne {
+species Personne skills: [moving] {
 	geometry forme;
 	rgb couleur;
 	agent environnement_crabe;
@@ -21,11 +21,6 @@ species Personne {
 		environnement_marche <- Plan[1, 0];
 		environnement_exportation <- Plan[2, 0];
 		couleur <- #white;
-		forme <- circle(1);
-	}
-
-	aspect {
-		draw forme color: couleur border: #black;
 	}
 
 }
